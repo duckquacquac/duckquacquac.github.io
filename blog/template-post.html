@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<!-- CHANGE: update the text inside data-title="" -->
+<body data-title="Post Title">
+
+  <nav id="site-nav"></nav>
+
+  <main class="page-content">
+    <div class="container">
+
+      <a href="index.html" class="back-link">← Blog</a>
+
+      <!-- CHANGE: label, title, meta -->
+      <div class="article-header">
+        <span class="article-label">Category</span>  <!-- e.g. Travel, Engineering, Thoughts -->
+        <h1>Post Title</h1>
+        <div class="article-meta">
+          <span>Month Year</span>
+          <span>X min read</span>  <!-- rough guide: 200 words ≈ 1 min -->
+        </div>
+      </div>
+
+      <div class="prose">
+
+        <!--
+          WRITING GUIDE:
+
+          ✓  First sentence: specific and concrete — a moment, a fact, a question.
+             Don't start with "In this post I will..."
+          ✓  h2  = new section (gets a divider line automatically)
+          ✓  h3  = sub-section
+          ✓  Callout boxes for tips or key observations
+          ✓  Add images with the pattern below when you have them
+        -->
+
+        <p>
+          [Opening — start with something specific.
+          A place, a moment, a question, an observation.]
+        </p>
+
+        <p>[Continue...]</p>
+
+        <!--
+          Image (remove comment tags when ready):
+          <img src="../assets/images/blog/YOUR-IMAGE.jpg" alt="Description" class="post-image" />
+          <p class="caption">Caption here.</p>
+        -->
+
+
+        <h2>Section Title</h2>
+
+        <p>[Your section content.]</p>
+
+        <!--
+          Callout box (optional):
+          <div class="callout">
+            [A tip, observation, or thing worth highlighting.]
+          </div>
+        -->
+
+        <h2>Another Section</h2>
+
+        <p>[Keep writing. No length requirement — write what the topic deserves.]</p>
+
+      </div><!-- /prose -->
+
+      <!-- Update these links once you have adjacent posts -->
+      <div class="post-nav">
+        <a href="previous-post.html">← Previous</a>
+        <a href="next-post.html">Next →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+</body>
+</html>

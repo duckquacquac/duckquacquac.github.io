@@ -1,0 +1,655 @@
+/* ============================================================
+   style.css
+   
+   Aesthetic : Huyen Chip homepage layout
+             + Bartosz Ciechanowski article typography
+   Palette   : warm parchment · earth brown · dark navy
+   
+   YOU DON'T NEED TO EDIT THIS FILE to use the site.
+   All your personal info lives in js/config.js.
+   
+   If you do want to tweak the look, search for the value
+   you want to change (e.g. a color or font size) using
+   Ctrl+F / Cmd+F and update it here.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS — all colors and sizes in one place
+   ============================================================ */
+:root {
+  /* Palette */
+  --bg:           #faf8f4;              /* warm parchment white — page background */
+  --bg-alt:       #f2ede4;              /* slightly deeper — table rows, callout bg */
+  --ink:          #1c1a17;              /* near-black — strong text, headings */
+  --ink-mid:      #3d3830;              /* main body text */
+  --ink-muted:    #8a8278;              /* dates, captions, secondary labels */
+  --ink-faint:    #ccc5ba;              /* divider lines, borders */
+  --navy:         #162032;              /* dark navy — page headings, article titles */
+  --earth:        #8b5e3c;              /* earth brown — accent, links, highlights */
+  --earth-hover:  #a87048;              /* lighter earth for hover states */
+  --earth-dim:    rgba(139,94,60,0.07); /* very faint earth tint — callout backgrounds */
+
+  /* Typography */
+  --font-display : 'Source Serif 4', Georgia, serif;   /* article titles, big headings */
+  --font-body    : 'Lora', Georgia, serif;              /* long-form prose paragraphs */
+  --font-ui      : 'Source Sans 3', system-ui, sans-serif; /* nav, labels, meta text */
+
+  /* Layout */
+  --max-width  : 1100px;   /* overall page container */
+  --max-prose  : 860px;   /* article text column — matches Bartosz's comfortable width */
+  --gutter     : clamp(1.25rem, 5vw, 2.5rem);  /* side padding, scales with screen */
+  --radius     : 3px;
+  --transition : 0.18s ease;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--ink-mid);
+  font-family: var(--font-ui);
+  font-size: 19px;          /* Bartosz base — his body text reads at ~19-20px */
+  line-height: 1.75;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle page fade-in on load */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-content { animation: fadeIn 0.4s ease both; }
+
+/* ============================================================
+   NAVIGATION
+   Huyen Chip style: name on the left, page links on the right
+   ============================================================ */
+nav {
+  border-bottom: 1px solid var(--ink-faint);
+  padding: 0 var(--gutter);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+}
+.nav-brand:hover { color: var(--earth); }
+
+.nav-links {
+  display: flex;
+  gap: 2.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid transparent;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--earth);
+  border-bottom-color: var(--earth);
+}
+
+/* Hamburger button — hidden on desktop, shows on mobile */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--ink);
+  transition: var(--transition);
+}
+
+/* ============================================================
+   LAYOUT CONTAINER
+   ============================================================ */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ============================================================
+   GLOBAL TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); font-weight: 700; }
+h2 { font-size: clamp(1.4rem, 2.8vw, 1.8rem); font-weight: 600; margin-bottom: 1rem; }
+h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink); }
+
+p { margin-bottom: 1.3rem; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--earth); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--earth-hover); }
+
+strong { font-weight: 600; color: var(--ink); }
+em { font-style: italic; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--ink-faint);
+  margin: 2.5rem 0;
+}
+
+/* ============================================================
+   ABOUT PAGE
+   Layout: Huyen Chip style — text flows on the left,
+   photo floats to the top-right so paragraphs wrap beside it.
+   Below: plain contact list.
+   ============================================================ */
+.about-wrap {
+  padding: 4rem 0 0;
+}
+
+/* The hero is a clearfix container — photo floats inside it */
+.about-hero {
+  display: block;    /* NOT grid — float layout like Chip Huyen */
+  margin-bottom: 3rem;
+  overflow: hidden;  /* clearfix so container wraps the float */
+}
+
+/* Photo floats RIGHT, text wraps around it on the left */
+.about-photo {
+  float: right;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--ink-faint);
+  display: block;
+  margin: 0.4rem 0 1.5rem 3rem;  /* top · right · bottom · left gap from text */
+  shape-outside: circle();        /* text wraps the circle shape */
+}
+
+/* Shows if you haven't added a photo yet */
+.about-photo-placeholder {
+  float: right;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: var(--bg-alt);
+  border: 1px dashed var(--ink-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin: 0.4rem 0 1.5rem 3rem;
+  shape-outside: circle();
+}
+
+/* Name — bigger, closer to Chip's scale */
+.about-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 3rem);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.25rem;
+  line-height: 1.1;
+}
+
+/* Tagline — tight under name */
+.about-tagline {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Bio paragraphs — larger, Chip Huyen body size */
+.about-bio p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: var(--ink-mid);
+  margin-bottom: 1.1rem;
+}
+
+/* The resume link — plain underline, no button */
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--earth);
+  border-bottom: 1px solid var(--earth);
+  padding-bottom: 1px;
+  transition: color var(--transition), border-color var(--transition);
+}
+.resume-link:hover {
+  color: var(--earth-hover);
+  border-color: var(--earth-hover);
+}
+
+/* Contact list at bottom of About page */
+.contact-section {
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-top: 1px solid var(--ink-faint);
+}
+
+.contact-section h2 {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.75rem;
+}
+
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contact-list li {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.contact-list li a {
+  color: var(--earth);
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+}
+.contact-list li a:hover {
+  color: var(--earth-hover);
+  border-bottom-color: var(--earth-hover);
+}
+
+/* ============================================================
+   PROJECTS & BLOG ARCHIVE PAGES
+   Ciechanowski-style: year headings, then a clean list of
+   entries with date · title · category tag.
+   ============================================================ */
+
+/* Page header */
+.list-header {
+  padding: 4rem 0 2.25rem;
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+.list-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.list-header p {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  max-width: 500px;
+  margin: 0;
+}
+
+/* Year section (e.g. "2026") */
+.year-group {
+  padding: 2.25rem 0 0;
+}
+
+.year-label {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+/* Each row in the list */
+.entry-list { list-style: none; }
+
+.entry {
+  display: grid;
+  grid-template-columns: 5rem 1fr auto;
+  align-items: baseline;
+  gap: 0 1.5rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--radius);
+  transition: background var(--transition);
+}
+.entry:hover { background: var(--earth-dim); }
+
+.entry-date {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.entry-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  line-height: 1.3;
+  transition: color var(--transition);
+}
+.entry-title:hover { color: var(--earth); }
+
+.entry-tag {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   ARTICLE / PROJECT PAGES
+   Bartosz Ciechanowski-style long-form prose.
+   Key choices:
+     - Lora serif at 1.15rem for body — comfortable reading
+     - Generous line-height (1.9) — airy, like a well-set book
+     - Source Serif 4 for section headings — bold chapter feel
+     - h2 gets a top border — clear chapter separation
+   ============================================================ */
+
+/* Article title area */
+.article-header {
+  padding: 1.5rem 0 1.25rem;
+  max-width: var(--max-prose);
+  margin: 0 auto;
+}
+
+.article-label {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--earth);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.article-header h1 {
+  font-size: clamp(2.5rem, 5vw, 3.4rem);
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.article-meta {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+}
+
+/* The prose column — all article body content goes here */
+.prose {
+  max-width: var(--max-prose);
+  padding-bottom: 5rem;
+  margin: 0 auto;
+}
+
+/* Body paragraphs — Lora serif, Bartosz-scale */
+.prose p {
+  font-family: var(--font-body);
+  font-size: 1.25rem;       /* Bartosz reads at this size */
+  line-height: 1.9;         /* generous — easy on the eyes for long reads */
+  color: var(--ink-mid);
+  margin-bottom: 1.6rem;
+  text-align: justify;
+}
+
+/* Major section headings — bold, chapter-break feel */
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-top: 3.5rem;
+  margin-bottom: 1.1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink-faint);  /* the chapter separator */
+}
+
+/* Sub-section headings */
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Lists inside prose */
+.prose ul,
+.prose ol {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  line-height: 1.85;
+  margin: 0 0 1.6rem 1.75rem;
+  color: var(--ink-mid);
+}
+.prose li { margin-bottom: 0.35rem; }
+
+/* Images inside prose */
+.prose img,
+.post-image {
+  width: 100%;
+  border-radius: var(--radius);
+  margin: 2.25rem 0 0.6rem;
+  border: 1px solid var(--ink-faint);
+  display: block;
+}
+
+/* Image captions */
+.caption {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Data tables */
+.prose table,
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+}
+
+.prose table th,
+.data-table th {
+  background: var(--bg-alt);
+  color: var(--navy);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--ink-faint);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.prose table td,
+.data-table td {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--ink-faint);
+  color: var(--ink-mid);
+  font-size: 0.95rem;
+}
+
+.prose table tr:nth-child(even) td,
+.data-table tr:nth-child(even) td {
+  background: var(--bg-alt);
+}
+
+/* Callout / highlight box */
+.callout {
+  background: var(--earth-dim);
+  border-left: 2.5px solid var(--earth);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1.1rem 1.4rem;
+  margin: 2rem 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  color: var(--ink-mid);
+  line-height: 1.65;
+}
+
+/* Back link at top of article pages */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding: 0.5rem 0 0;
+  display: block;
+  transition: color var(--transition);
+}
+.back-link:hover { color: var(--earth); }
+
+/* Previous / Next post navigation at article bottom */
+.post-nav {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink-faint);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: var(--max-prose);
+}
+
+.post-nav a {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--ink-faint);
+  transition: color var(--transition), border-color var(--transition);
+}
+.post-nav a:hover { color: var(--earth); border-color: var(--earth); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--ink-faint);
+  padding: 1rem var(--gutter);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-top: 4rem;
+  text-align: center;
+}
+footer a { color: var(--ink-muted); }
+footer a:hover { color: var(--earth); }
+
+/* ============================================================
+   MOBILE — screens narrower than 600px
+   ============================================================ */
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+
+  /* Stack photo above bio on small screens — float becomes block */
+  .about-photo,
+  .about-photo-placeholder {
+    float: none;
+    display: block;
+    width: 130px;
+    height: 130px;
+    margin: 0 0 1.5rem 0;
+  }
+
+  /* Hide the category tag on small screens — not enough room */
+  .entry {
+    grid-template-columns: 4rem 1fr;
+  }
+  .entry-tag { display: none; }
+
+  /* Show hamburger menu */
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0; right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--ink-faint);
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 0;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a {
+    padding: 0.7rem var(--gutter);
+    display: block;
+    border-bottom: none;
+  }
+}

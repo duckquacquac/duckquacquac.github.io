@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body data-title="About" id="about-page">
+
+  <nav id="site-nav"></nav>
+
+  <main class="page-content">
+    <div class="container">
+      <div class="about-wrap">
+
+        <!-- ================================================
+          PHOTO + BIO
+          The photo src and all text here is filled in
+          automatically from js/config.js
+        ================================================ -->
+        <div class="about-hero">
+
+          <img id="about-photo" class="about-photo" src="" alt="" />
+          <!--
+            No photo yet? Swap the <img> line above for this:
+            <div class="about-photo-placeholder">⚙</div>
+          -->
+
+          <div class="about-text">
+            <h1 class="about-name" id="about-name"></h1>
+            <p class="about-tagline" id="about-tagline"></p>
+            <div id="about-bio"></div>
+            <a id="about-resume" href="#" target="_blank" class="resume-link">↓ CV</a>
+          </div>
+
+        </div>
+
+        <!-- ================================================
+          CONTACT LIST
+          Edit the visible text (e.g. "linkedin.com/in/yourname")
+          directly in this file.
+          The href (the actual link) is set from config.js.
+        ================================================ -->
+        <div class="contact-section">
+          <h2>Contact</h2>
+          <ul class="contact-list">
+            <li>Email — <a id="contact-email" href="#"></a></li>
+            <li>LinkedIn — <a id="contact-linkedin" href="#" target="_blank">linkedin.com/in/yourname</a></li>
+            <li>GitHub — <a id="contact-github" href="#" target="_blank">github.com/yourname</a></li>
+            <!--
+              Add more contact lines here. Pattern:
+              <li>Platform — <a href="https://..." target="_blank">handle or URL</a></li>
+            -->
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/components.js"></script>
+</body>
+</html>

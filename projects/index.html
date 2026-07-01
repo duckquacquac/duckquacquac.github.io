@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: #b0612e; --rowpad: 24px; }
+
+    ::selection { background: var(--accent); color: #faf8f3; }
+
+    .hero { padding-top: 72px; padding-bottom: 48px; }
+    .hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; flex-wrap: wrap; }
+    .overline { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .overline i { width: 28px; height: 1px; background: var(--accent); display: inline-block; }
+    .hero h1 { margin: 0; font-size: clamp(52px, 8vw, 88px); line-height: 0.92; font-weight: 600; letter-spacing: -0.03em; color: #1c1a15; font-family: 'Space Grotesk', sans-serif; }
+    .lede { margin: 24px 0 0; font-size: 17px; line-height: 1.55; color: #6b665a; max-width: 480px; }
+    .stats { display: flex; gap: 40px; font-family: 'JetBrains Mono', monospace; padding-bottom: 8px; }
+    .stats .n { font-size: 34px; font-weight: 500; color: #1c1a15; line-height: 1; font-family: 'JetBrains Mono', monospace; }
+    .stats .n.acc { color: var(--accent); }
+    .stats .l { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a9486; margin-top: 8px; }
+
+    .index { padding-bottom: 40px; }
+    .legend, .proj-row { display: grid; grid-template-columns: 52px 116px 1fr 196px 24px; gap: 20px; align-items: center; }
+    .legend { padding-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #b3ad9e; border-bottom: 1px solid #ddd8cb; }
+    .legend .r { text-align: right; }
+
+    .proj-row { text-decoration: none; color: inherit; padding-top: var(--rowpad); padding-bottom: var(--rowpad); border-bottom: 1px solid #e3dece; transition: background 0.15s; }
+    .proj-row:hover { background: #efece2; border-radius: 3px; }
+    .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #b3ad9e; }
+    .status { display: inline-flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b665a; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .when { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8c8678; }
+    .proj-title { display: flex; flex-direction: column; gap: 5px; }
+    .proj-title b { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; color: #1c1a15; font-family: 'Space Grotesk', sans-serif; }
+    .proj-title span { font-size: 13px; color: #8c8678; }
+    .disc { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9486; }
+    .arrow { text-align: right; font-size: 16px; color: #c2bcab; }
+
+    @media (max-width: 640px) {
+      .legend, .proj-row { grid-template-columns: 40px 1fr 24px; }
+      .legend span:nth-child(2), .proj-row .status,
+      .legend span:nth-child(4), .proj-row .disc { display: none; }
+    }
+  </style>
+</head>
+<body data-title="Projects">
+
+  <nav id="site-nav"></nav>
+
+  <main class="page-content">
+    <div class="container">
+
+      <section class="hero">
+        <div class="hero-row">
+          <div style="max-width: 600px;">
+            <div class="overline"><i></i>Index — Selected Engineering Work</div>
+            <h1>Projects</h1>
+            <p class="lede">Engineering work across mechanism design, fluid systems, machining, and fabrication.</p>
+          </div>
+          <div class="stats">
+            <div><div class="n">03</div><div class="l">Total</div></div>
+            <div><div class="n acc">02</div><div class="l">Active</div></div>
+            <div><div class="n">'25–'26</div><div class="l">Span</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+        HOW TO ADD A PROJECT:
+
+        1. Copy one <a class="proj-row"> block below.
+        2. Paste it above the comment "ADD NEW PROJECTS ABOVE".
+        3. Update: href, num, status/when, proj-title b, proj-title span, disc.
+        4. Update the stats numbers at the top (Total, Active).
+      ==================================================== -->
+
+      <section class="index">
+        <div class="legend">
+          <span>No.</span>
+          <span>Status</span>
+          <span>Project</span>
+          <span class="r">Discipline</span>
+          <span></span>
+        </div>
+
+        <a class="proj-row" href="airbrakes.html">
+          <span class="num">01</span>
+          <span class="status"><span class="dot"></span>2025-2026</span>
+          <span class="proj-title">
+            <b>Airbrakes System Design</b>
+            <span>Deployable drag-control mechanism for competition apogee targeting.</span>
+          </span>
+          <span class="disc">Rocketry</span>
+          <span class="arrow">↗</span>
+        </a>
+
+        <a class="proj-row" href="Orient Movement.html">
+          <span class="num">02</span>
+          <span class="status"><span class="dot"></span>Summer 2025</span>
+          <span class="proj-title">
+            <b>Orient Movement Breakdown</b>
+            <span>Teardown and component analysis of a 21-jewel mechanical watch movement.</span>
+          </span>
+          <span class="disc">Precision Eng.</span>
+          <span class="arrow">↗</span>
+        </a>
+
+        <a class="proj-row" href="designnfabrication.html">
+          <span class="num">03</span>
+          <span class="when">May 2025</span>
+          <span class="proj-title">
+            <b>Assorted design/fabrication work</b>
+          </span>
+          <span class="disc">Design and Fabrication</span>
+          <span class="arrow">↗</span>
+        </a>
+
+        <!-- ADD NEW PROJECTS ABOVE THIS LINE -->
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+</body>
+</html>

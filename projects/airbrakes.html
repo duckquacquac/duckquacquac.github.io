@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* Consistent image sizing for this page */
+    .img-full  { width: 100%; display: block; margin: 2.25rem auto 0.6rem; border: 1px solid var(--ink-faint); border-radius: var(--radius); }
+    .img-large { width: 75%;  display: block; margin: 2.25rem auto 0.6rem; border: 1px solid var(--ink-faint); border-radius: var(--radius); }
+    .img-mid   { width: 50%;  display: block; margin: 2.25rem auto 0.6rem; border: 1px solid var(--ink-faint); border-radius: var(--radius); }
+    .img-small { width: 35%;  display: block; margin: 2.25rem auto 0.6rem; border: 1px solid var(--ink-faint); border-radius: var(--radius); }
+  </style>
+</head>
+<body data-title="Airbrakes System Design">
+
+  <nav id="site-nav"></nav>
+
+  <main class="page-content">
+    <div class="container">
+
+      <div class="article-header">
+        <a href="index.html" class="back-link">← Projects</a>
+        <span class="article-label">Rocketry · Mechanism Design · CFD</span>
+        <h1>Airbrakes System Design</h1>
+        <div class="article-meta">
+          <span>2025–2026</span>
+          <span>USF SOAR — IREC</span>
+          <span>SolidWorks · ANSYS Fluent · MATLAB/Simulink</span>
+        </div>
+      </div>
+
+      <div class="prose">
+
+        <img src="../assets/images/projects/airbrakes-at-expo.png" alt="Airbrakes at USF Engineering Expo" class="img-small" />
+        <p class="caption">Airbrakes fully assembled at USF Engineering Expo.</p>
+
+        <p>
+          SOAR is competing in the <a href="https://www.esrarocket.org/" target="_blank">International Rocket Engineering Competition</a>,
+          where 143 teams compete to launch rockets in Midland, Texas. The team is scored based on
+          several factors, including rocket build quality, payload challenge, and project report. Most
+          importantly, 350 of 1,000 possible points are based on altitude achieved relative to target
+          altitude. The formula for altitude points is:
+        </p>
+
+        $$\text{Points} = 350 - \left(\frac{350}{0.3 \times \text{Apogee}_\text{target}}\right) \times |\text{Apogee}_\text{target} - \text{Apogee}_\text{actual}|$$
+
+        <p>
+          Because of this high point component, the airbrakes sub-system is the team's ambitious attempt
+          to get as close to target altitude as possible. The underlying assumption is that overshooting
+          with the motor and relying on a control system is more reliable than predicting apogee from
+          amateur high-power solid motor thrust data alone. This assumption is backed by the team's
+          experience with deviations from manufacturers' provided thrust curves.
+        </p>
+
+        <div style="text-align: center; margin: 2.25rem 0;">
+          <video controls style="width: 50%;">
+            <source src="../assets/images/projects/airbrakes-in-the-hotels-bathroom.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Final deliverable: a fully functional airbrakes system inside the rocket's midsection.</p>
+        </div>
+
+
+        <h2>Governing Equation</h2>
+
+        <p>
+          To understand how the rocket behaves, we derive a model using Newton's second law. Assume the
+          rocket is flying vertically, under no wind load, after motor burnout (coast phase). The rocket
+          is under the effect of two forces only: drag and gravity. Strictly speaking, a lift component
+          exists, but it cancels by symmetry.
+        </p>
+
+        <p>
+          The rocket is initially at $v_\text{cutoff}$ and $h_\text{cutoff}$, and $t = 0$ is set to
+          the moment of motor cutoff. The positive direction is upward.
+        </p>
+
+        $$\sum F = ma$$
+
+        $$-mg - F_\text{drag} = ma$$
+
+        $$-g - \frac{F_\text{drag}}{m} = a$$
+
+        <p>Integrating:</p>
+
+        $$\int \left(-g - \frac{F_\text{drag}}{m}\right) dt = v + C$$
+
+        $$-gt - \int \frac{F_\text{drag}}{m}\, dt = v(t) + C$$
+
+        <p>Since $v(0) = v_\text{cutoff}$:</p>
+
+        $$v(t) = v_\text{cutoff} - gt - \int_0^t \frac{F_\text{drag}}{m}\, dt \tag{1}$$
+
+        <p>Similarly, integrating $v(t)$ with respect to time gives altitude as a function of time:</p>
+
+        $$h(t) = h_\text{cutoff} + v_\text{cutoff}\, t - \frac{1}{2}gt^2 - \int_0^t \left(\int_0^t \frac{F_\text{drag}}{m}\, dt\right) dt \tag{2}$$
+
+        <p>Solving equations (1) and (2) gives the apogee of the rocket.</p>
+
+
+        <h2>Simulink</h2>
+
+        <p>
+          Obviously, no one wants to solve this system of equations by hand. We developed a Simulink
+          3-DOF model to automatically solve for apogee.
+        </p>
+
+        <p>
+          The model implements a coast-phase flight dynamics simulation for a sounding rocket using
+          MATLAB/Simulink. The primary signal chain is:
+        </p>
+
+        <ul>
+          <li><strong>altToTemp</strong> — converts altitude to atmospheric temperature (K)</li>
+          <li><strong>velocityToMach</strong> — computes Mach number from velocity and temperature (K)</li>
+          <li><strong>dragModel</strong> — computes drag force ($F_d$) as a function of Mach number and flap angle, derived from CFD data</li>
+          <li><strong>3DOF (Body Axes), Fixed Mass</strong> — integrates equations of motion in the pitch plane</li>
+        </ul>
+
+        <p>
+          The model is structured for coast-phase analysis only, with no thrust input and fixed mass.
+          This makes it appropriate for post-burnout apogee prediction and airbrakes control development,
+          provided initial conditions are set to the burnout state.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-simulink.png" alt="Simulink model block diagram" class="img-full" />
+        <p class="caption">Simulink coast-phase flight dynamics model.</p>
+
+        <p>The result, given boundary conditions:</p>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Parameter</th><th>Value</th><th>Unit</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Mass</td><td>27</td><td>kg</td></tr>
+            <tr><td>Initial velocity</td><td>272</td><td>m/s</td></tr>
+            <tr><td>Initial position</td><td>1068</td><td>m</td></tr>
+            <tr><td>Gravity</td><td>9.81</td><td>m/s²</td></tr>
+            <tr><td>Incidence angle</td><td>π/2</td><td>rad</td></tr>
+          </tbody>
+        </table>
+
+        <p>
+          During testing, a 10× increase in rocket mass produced an approximately 1,000 m increase in
+          predicted apogee. This appears counterintuitive given that a heavier rocket also weighs more,
+          but it has a physically valid explanation — with a critical caveat related to this model's
+          decoupled structure.
+        </p>
+
+        <h3>Physics of Coast Phase Deceleration</h3>
+
+        <p>During coast, the net deceleration is:</p>
+
+        $$a = -\frac{F_\text{drag}}{m} - g$$
+
+        <p>
+          Increasing mass reduces the drag deceleration term $F_\text{drag}/m$, which dominates over
+          the constant gravitational term $g$. The net result is a higher predicted apogee.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-simulink-result.png" alt="Simulink result" class="img-full" />
+        <p class="caption">Simulink result — coast-phase flight dynamics model.</p>
+
+        <p>
+          The model shows that with no flaps deployed, the apogee is approximately 3,500 m, which
+          aligns closely with OpenRocket simulation.
+        </p>
+
+
+        <h2>Concept Design</h2>
+
+        <p>
+          To effectively produce a controllable drag force, the rocket must be able to deploy control
+          surfaces and reliably modulate drag. CFD at this stage was rough, but a number of CAD concept
+          designs were carried out by me and team members. Some are included below.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-1.png" alt="Concept design — cam-slot mechanism" class="img-large" />
+        <p class="caption">Concept design — cam-slot mechanism.</p>
+
+        <img src="../assets/images/projects/airbrakes-2.png" alt="Concept design — linkage mechanism" class="img-large" />
+        <p class="caption">Concept design — linkage mechanism.</p>
+
+        <img src="../assets/images/projects/airbrakes-3.png" alt="Concept design — cyclic airbrakes" class="img-large" />
+        <p class="caption">Concept design — cyclic airbrakes.</p>
+
+        <img src="../assets/images/projects/airbrakes-4.png" alt="Concept design — gear rack airbrakes" class="img-large" />
+        <p class="caption">Concept design — gear rack airbrakes.</p>
+
+
+        <h2>Mechanical Design</h2>
+
+        <p>
+          After the concept generation phase, the final airbrakes geometry is four curved flaps opening
+          radially outward, driven by a crank-slider mechanism.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-assembly.png" alt="Airbrakes CAD assembly" class="img-full" />
+        <p class="caption">Airbrakes CAD assembly.</p>
+
+        <img src="../assets/images/projects/airbrakes-skeleton-diagram.png" alt="Skeleton diagram" class="img-full" />
+        <p class="caption">Airbrakes skeleton diagram for kinematics and dynamics calculations.</p>
+
+        <p>
+          The mechanical design maximises flap extension to increase drag. This prompted us to design
+          the PCB with a central hole to save space for the lead screw. Everything else is compacted
+          to the perimeter so the lead screw travel can be as long as possible.
+        </p>
+
+        <p>
+          The skeleton frame to hold the airbrakes is a design by Cesar, allowing easy integration
+          into the rocket body and providing a common datum for all sub-systems to build upon.
+        </p>
+
+        <h3>Lead Screw Calculation and Motor Choice</h3>
+
+        <p>
+          To balance motor torque and actuation speed, a preliminary calculation was carried out using
+          machine design principles. The governing equations are:
+        </p>
+
+        <ul>
+          <li>
+            <p><strong>Torque to raise a load:</strong></p>
+            $$T_{\text{raise}} = \frac{F \cdot D_m}{2} \cdot \left(\frac{L + u \cdot \pi D_m}{\pi D_m - u \cdot L}\right)$$
+          </li>
+          <li>
+            <p><strong>Torque to lower a load:</strong></p>
+            $$T_{\text{lower}} = \frac{F \cdot D_m}{2} \cdot \left(\frac{L - u \cdot \pi D_m}{\pi D_m + u \cdot L}\right)$$
+          </li>
+        </ul>
+
+        <p>
+          An Excel trade study was carried out comparing different lead screw configurations and motor
+          specifications from McMaster-Carr, with maximum output force as the primary output metric.
+          After comparing against expected aerodynamic loads, a NEMA 23 stepper motor was selected,
+          paired with a ¼"-12 fast-travel lead screw.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-leadscrew.png" alt="Lead screw motor trade study" class="img-full" />
+        <p class="caption">Snapshot of the lead screw–motor trade study.</p>
+
+
+        <h2>Manufacturing, Assembling, and Troubleshooting</h2>
+
+        <p>
+          The airbrakes module is built entirely with in-house manufacturing. 100% of the linkage
+          mechanism, chassis, and bulkhead was milled with a tabletop CNC router, with G-code generated
+          in Fusion 360 and finishing done on a manual mill and by hand. Below are pictures from the
+          manufacturing process.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-3dprinted-mockup.jpg" alt="3D-printed mockup" class="img-large" />
+        <p class="caption">3D-printed mockup of parts to be manufactured.</p>
+
+        <img src="../assets/images/projects/airbrakes-fussion.jpg" alt="G-code generation in Fusion 360" class="img-large" />
+        <p class="caption">G-code generation in Fusion 360.</p>
+
+        <img src="../assets/images/projects/airbrakes-cnc.jpg" alt="CNC milling" class="img-large" />
+        <p class="caption">CNC milling of the airbrakes strong plate.</p>
+
+        <img src="../assets/images/projects/airbrakes-jig.png" alt="Jig design" class="img-large" />
+        <p class="caption">Jig design for post-processing. The CNC router cannot drill side holes directly.</p>
+
+        <img src="../assets/images/projects/airbrakes-manualmill.jpg" alt="Manual mill" class="img-large" />
+        <p class="caption">Drilling side holes on the linkage mount using a manual mill and 3D-printed jig.</p>
+
+        <img src="../assets/images/projects/airbrakes-spacing.jpg" alt="Unoptimised spacing" class="img-large" />
+        <p class="caption">Unoptimised part spacing — parts spaced 2× endmill diameter apart, wasting material.</p>
+
+        <img src="../assets/images/projects/airbrakes-better-spacing.png" alt="Optimised spacing" class="img-large" />
+        <p class="caption">Improved spacing — parts spaced 1× endmill diameter apart, saving time and material.</p>
+
+        <img src="../assets/images/projects/airbrakes-chassis.jpg" alt="Finished chassis" class="img-large" />
+        <p class="caption">Finished chassis and linkage assembly.</p>
+
+        <img src="../assets/images/projects/airbrakes-chriss.jpg" alt="Testing" class="img-large" />
+        <p class="caption">Testing of the airbrakes system.</p>
+
+
+        <h2>CFD</h2>
+
+        <p>
+          Based on dimensional analysis, the drag force takes the form
+          $F_d = f(\text{Ma}, \text{Re}, \text{Geometry})$. CFD models of the rocket at different
+          flap angles were carried out, sweeping from 0 to Mach 0.8, with Reynolds number calculated
+          directly from the launch profile to limit the parameter space. A total of 55 simulations
+          were run across 6 geometry configurations (different flap angles).
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-cfd.png" alt="CFD pressure contour" class="img-full" />
+        <p class="caption">CFD pressure contour map of the rocket with airbrakes deployed. Drag force is calculated from this.</p>
+
+        <p>
+          The results show that drag force depends heavily on flap angle and Mach number, and is
+          relatively insensitive to Reynolds number. Multiple models were fitted to the data; a
+          second-order polynomial produced the best fit. This model was passed to the EECS team
+          to program the flight controller.
+        </p>
+
+        <img src="../assets/images/projects/airbrakes-data-fitting.png" alt="CFD data fitting" class="img-full" />
+        <p class="caption">CFD results — drag force vs. Mach number at varying flap angles, with polynomial fit.</p>
+
+
+        <h2>Launch</h2>
+
+        <p>
+          After four days of delay, Aurora — USF's rocket — finally launched at IREC 2026, reaching
+          an apogee of 9,035 ft. Due to a tilted rail guide and a lower off-the-rail speed than
+          anticipated, the rocket undershot the target altitude and the airbrakes did not deploy.
+          This is a regrettable outcome given a year of work, but I remain positive about future
+          testing and the airbrakes' capability.
+        </p>
+
+      </div><!-- /prose -->
+
+      <div class="post-nav">
+        <span></span>
+        <a href="cnc-milling.html">CNC Milling Fixture →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+</body>
+</html>

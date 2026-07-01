@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <!-- Remove this line if you don't need a chart: -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+</head>
+<!-- CHANGE: update the text inside data-title="" -->
+<body data-title="Project Title">
+
+  <nav id="site-nav"></nav>
+
+  <main class="page-content">
+    <div class="container">
+
+      <a href="index.html" class="back-link">← Projects</a>
+
+      <!-- CHANGE: label, title, and meta -->
+      <div class="article-header">
+        <span class="article-label">Category · Subcategory</span>
+        <h1>Project Title</h1>
+        <div class="article-meta">
+          <span>Month Year</span>
+          <span>Context (university / team / personal)</span>
+          <span>Tools: SolidWorks · etc.</span>
+        </div>
+      </div>
+
+      <div class="prose">
+
+        <!--
+          WRITING GUIDE — Ciechanowski style:
+
+          ✓  Start with the PROBLEM, not "In this project I..."
+          ✓  Help the reader understand WHY this was hard before showing the solution
+          ✓  h2  = major chapter (gets a divider line above it automatically)
+          ✓  h3  = sub-section within a chapter
+          ✓  Back every claim with a number if you can
+          ✓  Callout box for the single most important result
+          ✓  End with what you'd do differently — shows engineering maturity
+        -->
+
+        <p>
+          [Opening paragraph — start with the problem or situation.
+          Be specific. A number or a constraint is a great way to open.]
+        </p>
+
+        <div class="callout">
+          <strong>Key result:</strong> [One sentence — your main outcome.]
+        </div>
+
+        <!--
+          Add an image when ready. Put the file in assets/images/projects/
+          <img src="../assets/images/projects/YOUR-IMAGE.jpg" alt="Description" class="post-image" />
+          <p class="caption">Figure 1 — Caption here.</p>
+        -->
+
+
+        <h2>Section Title</h2>
+
+        <p>
+          [Write your section. 2–4 paragraphs.
+          Be specific — dimensions, loads, tolerances, observations.]
+        </p>
+
+        <h3>Sub-section (optional)</h3>
+        <p>[More detail here.]</p>
+
+
+        <!-- Data table — remove if not needed -->
+        <table class="data-table">
+          <thead>
+            <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>[Name]</td><td>[Value]</td><td>[Unit / note]</td></tr>
+            <tr><td>[Name]</td><td>[Value]</td><td>[Unit / note]</td></tr>
+          </tbody>
+        </table>
+
+
+        <!-- Chart — remove this entire block if not needed -->
+        <h2>Results</h2>
+        <p>[Describe what the chart is showing before the chart appears.]</p>
+        <div style="margin: 2.25rem 0; max-width: 580px;">
+          <canvas id="myChart"></canvas>
+        </div>
+        <p class="caption">Figure — [Caption describing the data].</p>
+        <script>
+          new Chart(document.getElementById('myChart'), {
+            type: 'bar',  // options: 'bar', 'line', 'pie'
+            data: {
+              labels: ['Label A', 'Label B', 'Label C', 'Label D'],
+              datasets: [{
+                data: [10, 25, 18, 30],  // ← CHANGE to your values
+                backgroundColor: '#8b5e3c',
+                borderRadius: 2,
+              }]
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8a8278' } },
+                x: { grid: { display: false }, ticks: { color: '#4a4540' } }
+              }
+            }
+          });
+        </script>
+
+
+        <h2>Lessons</h2>
+
+        <p>
+          [What did you learn? What would you change?
+          Be honest — this is the most credible part of an engineering write-up.]
+        </p>
+
+        <ul>
+          <li>[Takeaway 1]</li>
+          <li>[Takeaway 2]</li>
+          <li>[Takeaway 3]</li>
+        </ul>
+
+      </div><!-- /prose -->
+
+      <!-- Update these links once you have adjacent projects -->
+      <div class="post-nav">
+        <a href="previous-project.html">← Previous</a>
+        <a href="next-project.html">Next →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+</body>
+</html>
