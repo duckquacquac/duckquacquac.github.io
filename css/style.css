@@ -250,7 +250,7 @@ hr {
 /* Bio paragraphs — larger, Chip Huyen body size */
 .about-bio p {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1.85;
   color: var(--ink-mid);
   margin-bottom: 1.1rem;
@@ -493,12 +493,13 @@ hr {
 
 /* Images inside prose */
 .prose img,
+.prose img,
 .post-image {
-  width: 100%;
-  border-radius: var(--radius);
-  margin: 2.25rem 0 0.6rem;
-  border: 1px solid var(--ink-faint);
+  width: 70%;
   display: block;
+  margin: 2.25rem auto 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--ink-faint);
 }
 
 /* Image captions */

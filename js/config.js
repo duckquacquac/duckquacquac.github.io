@@ -47,7 +47,7 @@ const SITE = {
      Update the filename below if yours is named differently.
   ---------------------------------------------------------- */
   resume: {
-    label: "Download resume (docx)",
+    label: "Download resume",
     file:  "assets/resume/resume.docx",
   },
 
