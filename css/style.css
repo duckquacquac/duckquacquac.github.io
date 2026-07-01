@@ -37,7 +37,7 @@
   --font-ui      : 'Source Sans 3', system-ui, sans-serif; /* nav, labels, meta text */
 
   /* Layout */
-  --max-width  : 1100px;   /* overall page container */
+  --max-width  : 900px;   /* overall page container */
   --max-prose  : 860px;   /* article text column — matches Bartosz's comfortable width */
   --gutter     : clamp(1.25rem, 5vw, 2.5rem);  /* side padding, scales with screen */
   --radius     : 3px;
