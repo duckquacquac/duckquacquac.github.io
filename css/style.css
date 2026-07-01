@@ -190,6 +190,8 @@ hr {
    ============================================================ */
 .about-wrap {
   padding: 4rem 0 0;
+  max-width: 780px;
+  margin: 0 auto;
 }
 
 /* The hero is a clearfix container — photo floats inside it */
