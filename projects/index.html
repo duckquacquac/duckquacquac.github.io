@@ -8,42 +8,68 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root { --accent: #b0612e; --rowpad: 24px; }
-
+    :root { --accent: #b0612e; }
     ::selection { background: var(--accent); color: #faf8f3; }
 
-    .hero { padding-top: 72px; padding-bottom: 48px; }
-    .hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; flex-wrap: wrap; }
-    .overline { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-    .overline i { width: 28px; height: 1px; background: var(--accent); display: inline-block; }
-    .hero h1 { margin: 0; font-size: clamp(52px, 8vw, 88px); line-height: 0.92; font-weight: 600; letter-spacing: -0.03em; color: #1c1a15; font-family: 'Space Grotesk', sans-serif; }
-    .lede { margin: 24px 0 0; font-size: 17px; line-height: 1.55; color: #6b665a; max-width: 480px; }
-    .stats { display: flex; gap: 40px; font-family: 'JetBrains Mono', monospace; padding-bottom: 8px; }
-    .stats .n { font-size: 34px; font-weight: 500; color: #1c1a15; line-height: 1; font-family: 'JetBrains Mono', monospace; }
-    .stats .n.acc { color: var(--accent); }
-    .stats .l { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a9486; margin-top: 8px; }
+    /* Hero */
+    .hero { padding-top: 48px; padding-bottom: 32px; display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; }
+    .hero h1 { margin: 0; font: 700 30px/1 'Space Grotesk', sans-serif; letter-spacing: -0.025em; color: #1a1a1a; }
+    .hero-label { font: 500 10.5px 'JetBrains Mono', monospace; letter-spacing: 0.16em; color: var(--accent); text-transform: uppercase; }
 
-    .index { padding-bottom: 40px; }
-    .legend, .proj-row { display: grid; grid-template-columns: 52px 116px 1fr 196px 24px; gap: 20px; align-items: center; }
-    .legend { padding-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #b3ad9e; border-bottom: 1px solid #ddd8cb; }
-    .legend .r { text-align: right; }
+    /* Project list */
+    .proj-list { display: flex; flex-direction: column; padding-bottom: 48px; }
 
-    .proj-row { text-decoration: none; color: inherit; padding-top: var(--rowpad); padding-bottom: var(--rowpad); border-bottom: 1px solid #e3dece; transition: background 0.15s; }
-    .proj-row:hover { background: #efece2; border-radius: 3px; }
-    .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #b3ad9e; }
-    .status { display: inline-flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b665a; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-    .when { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8c8678; }
-    .proj-title { display: flex; flex-direction: column; gap: 5px; }
-    .proj-title b { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; color: #1c1a15; font-family: 'Space Grotesk', sans-serif; }
-    .proj-title span { font-size: 13px; color: #8c8678; }
-    .disc { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9486; }
-    .arrow { text-align: right; font-size: 16px; color: #c2bcab; }
+    /* Each project row — alternates image left / image right */
+    .proj-item {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 36px;
+      padding: 0 0 48px;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      border-bottom: 1px solid #e3dece;
+      margin-bottom: 48px;
+      transition: opacity 0.15s;
+    }
+    .proj-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .proj-item:hover { opacity: 0.85; }
+    .proj-item.reverse { grid-template-columns: 1fr 2fr; }
+    .proj-item.reverse .proj-img  { order: 2; }
+    .proj-item.reverse .proj-info { order: 1; text-align: right; }
+
+    /* Image pane */
+    .proj-img {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 6px;
+      background: repeating-linear-gradient(135deg, #e6e1d7 0 8px, #efebe3 8px 16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: 400 11px 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      color: #a09889;
+      border: 1px solid #ddd8cb;
+    }
+    .proj-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Text pane */
+    .proj-info { display: flex; flex-direction: column; gap: 10px; }
+    .proj-meta { font: 500 10.5px 'JetBrains Mono', monospace; letter-spacing: 0.12em; color: #9c948a; text-transform: uppercase; }
+    .proj-info h3 { margin: 0; font: 500 24px/1.15 'Space Grotesk', sans-serif; color: #1a1a1a; letter-spacing: -0.015em; }
+    .proj-info p  { margin: 0; font: 400 13.5px/1.55 'Space Grotesk', sans-serif; color: #7a746b; }
 
     @media (max-width: 640px) {
-      .legend, .proj-row { grid-template-columns: 40px 1fr 24px; }
-      .legend span:nth-child(2), .proj-row .status,
-      .legend span:nth-child(4), .proj-row .disc { display: none; }
+      .proj-item,
+      .proj-item.reverse { grid-template-columns: 1fr; }
+      .proj-item.reverse .proj-img  { order: 1; }
+      .proj-item.reverse .proj-info { order: 2; text-align: left; }
     }
   </style>
 </head>
@@ -54,65 +80,65 @@
   <main class="page-content">
     <div class="container">
 
-      <section class="hero">
-        <div class="hero-row">
-          <div style="max-width: 600px;">
-            <div class="overline"><i></i>Selected Engineering Work</div>
-            <h1>Projects</h1>
-            <p class="lede">Engineering work across mechanism design, fluid systems, machining, and fabrication.</p>
-          </div>
-          
-        </div>
-      </section>
+      <div class="hero">
+        <h1>Projects</h1>
+        <span class="hero-label">Selected Engineering Work — 03</span>
+      </div>
 
       <!-- ====================================================
         HOW TO ADD A PROJECT:
 
-        1. Copy one <a class="proj-row"> block below.
-        2. Paste it above the comment "ADD NEW PROJECTS ABOVE".
-        3. Update: href, num, status/when, proj-title b, proj-title span, disc.
-        4. Update the stats numbers at the top (Total, Active).
+        1. Copy one <a class="proj-item"> block.
+        2. Paste it above "ADD NEW PROJECTS ABOVE THIS LINE".
+        3. Alternate normal / reverse for left-right image pattern.
+        4. Update: href, proj-meta, h3, p.
+        5. If you HAVE an image — replace the placeholder text
+           inside .proj-img with:
+               <img src="../assets/images/projects/YOUR-FILE.jpg" alt="..." />
+           If NO image yet — leave the placeholder text as-is.
       ==================================================== -->
 
-      <section class="index">
-        <div class="legend">
-          <span>No.</span>
-          <span>Date</span>
-          <span>Project</span>
-          
-          <span></span>
-        </div>
+      <section class="proj-list">
 
-        <a class="proj-row" href="airbrakes.html">
-          <span class="num">01</span>
-          <span class="status"><span class="dot"></span>2025-2026</span>
-          <span class="proj-title">
-            <b>Airbrakes System Design</b>
-            <span>Deployable drag-control mechanism for competition apogee targeting.</span>
-          </span>
-        
-          <span class="arrow">↗</span>
+        <!-- PROJECT 01 — image LEFT -->
+        <a class="proj-item" href="airbrakes.html">
+          <div class="proj-img">
+            <!-- ★ CHANGE: swap placeholder text for your image -->
+            <img src="../assets/images/projects/airbrakes-at-expo.png" alt="Airbrakes assembly" />
+          </div>
+          <div class="proj-info">
+            <div class="proj-meta">01 / 2025—2026</div>
+            <h3>Airbrakes System Design</h3>
+            <p>Deployable drag-control mechanism for competition apogee targeting.</p>
+          </div>
         </a>
 
-        <a class="proj-row" href="Orient Movement.html">
-          <span class="num">02</span>
-          <span class="status"><span class="dot"></span>Summer 2025</span>
-          <span class="proj-title">
-            <b>Orient Movement Breakdown</b>
-            <span>Teardown and component analysis of a 21-jewel mechanical watch movement.</span>
-          </span>
-   
-          <span class="arrow">↗</span>
+        <!-- PROJECT 02 — image RIGHT -->
+        <a class="proj-item reverse" href="Orient Movement.html">
+          <div class="proj-img">
+            <!-- ★ CHANGE: swap placeholder text for your image -->
+            No image yet — add orient-thumb.jpg to assets/images/projects/
+            <!-- <img src="../assets/images/projects/orient-thumb.jpg" alt="Orient movement" /> -->
+          </div>
+          <div class="proj-info">
+            <div class="proj-meta">02 / Summer 2025</div>
+            <h3>Orient Movement Breakdown</h3>
+            <p>Teardown and component analysis of a 21-jewel mechanical watch movement.</p>
+          </div>
         </a>
 
-        <a class="proj-row" href="designnfabrication.html">
-          <span class="num">03</span>
-          <span class="when">May 2025</span>
-          <span class="proj-title">
-            <b>Assorted design/fabrication work</b>
-          </span>
-      
-          <span class="arrow">↗</span>
+        <!-- PROJECT 03 — image LEFT -->
+        <a class="proj-item" href="designnfabrication.html">
+          <div class="proj-img">
+            <!-- ★ CHANGE: swap placeholder text for your image -->
+            No image yet — add fabrication-thumb.jpg to assets/images/projects/
+            <!-- <img src="../assets/images/projects/fabrication-thumb.jpg" alt="Fabrication work" /> -->
+          </div>
+          <div class="proj-info">
+            <div class="proj-meta">03 / May 2025</div>
+            <h3>Assorted Design / Fabrication Work</h3>
+            <p></p>
+          </div>
         </a>
 
         <!-- ADD NEW PROJECTS ABOVE THIS LINE -->
